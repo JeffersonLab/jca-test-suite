@@ -1,4 +1,4 @@
-package caserver;
+package org.jlab.caserver;
 
 import gov.aps.jca.CAException;
 import gov.aps.jca.JCALibrary;
