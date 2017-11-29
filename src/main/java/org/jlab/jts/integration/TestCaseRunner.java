@@ -12,7 +12,7 @@ import org.jlab.caclient.MonitorGroup;
  *
  * @author slominskir
  */
-public class ClientTestRunner implements Runnable {
+public class TestCaseRunner implements Runnable {
 
     private final CAClient client;
     private final int timeoutSeconds;
@@ -20,7 +20,7 @@ public class ClientTestRunner implements Runnable {
     private final Consumer<? super Object> cnsmr;
     private final String[] channelNames;
 
-    public ClientTestRunner(CAClient client, int timeoutSeconds, int monitorSeconds, Consumer<? super Object> cnsmr, String... channelNames) {
+    public TestCaseRunner(CAClient client, int timeoutSeconds, int monitorSeconds, Consumer<? super Object> cnsmr, String... channelNames) {
         this.client = client;
         this.timeoutSeconds = timeoutSeconds;
         this.monitorSeconds = monitorSeconds;
@@ -37,7 +37,7 @@ public class ClientTestRunner implements Runnable {
                 Thread.sleep(monitorSeconds * 1000);
             }
         } catch (Exception ex) {
-            Logger.getLogger(ClientTestRunner.class.getName()).log(Level.SEVERE, "ClientTestRunner Exception", ex);
+            Logger.getLogger(TestCaseRunner.class.getName()).log(Level.SEVERE, "Test Case Exception:", ex);
         }
     }
 }

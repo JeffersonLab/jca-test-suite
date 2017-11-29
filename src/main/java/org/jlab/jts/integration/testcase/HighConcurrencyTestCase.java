@@ -1,4 +1,4 @@
-package org.jlab.jts.integration;
+package org.jlab.jts.integration.testcase;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,29 +11,27 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import javax.websocket.DeploymentException;
 import org.jlab.caclient.CAClient;
-import org.jlab.caclient.ws.WSClient;
+import org.jlab.jts.integration.TestCase;
+import org.jlab.jts.integration.TestCaseRunner;
 
 /**
  *
  * @author slominskir
  */
-public class DeadLockTest {
+public class HighConcurrencyTestCase implements TestCase {
 
-    private ExecutorService executor;
-
-    public static void main(String[] args) throws Exception {
-        new DeadLockTest();
-    }
+    private final ExecutorService executor;
+    private final CAClient client;
     
-    public DeadLockTest() throws DeploymentException, IOException, InterruptedException, Exception {
-        executor = Executors.newCachedThreadPool();
-
-        tonsOfConcurrencyTest();
+    public HighConcurrencyTestCase(CAClient client) throws DeploymentException, IOException, InterruptedException, Exception {
         
-        executor.shutdown();
+        this.client = client;
+        
+        executor = Executors.newCachedThreadPool();
     }
 
-    public void tonsOfConcurrencyTest() throws URISyntaxException, DeploymentException, IOException, InterruptedException, Exception {
+    @Override
+    public void doTest() throws URISyntaxException, DeploymentException, IOException, InterruptedException, Exception {
         AtomicLong count = new AtomicLong();
         int timeoutSeconds = 2;
         int monitorSeconds = 20;
@@ -44,9 +42,9 @@ public class DeadLockTest {
         
         // Create web socket connections
         for (int i = 0; i < numClients; i++) {
-            CAClient client = new WSClient();
+            CAClient c = client.getClass().newInstance();
             
-            executor.execute(new ClientTestRunner(client, timeoutSeconds, monitorSeconds, cnsmr, channelNames));
+            executor.execute(new TestCaseRunner(c, timeoutSeconds, monitorSeconds, cnsmr, channelNames));
             
             clientList.add(client);
         }
@@ -55,10 +53,14 @@ public class DeadLockTest {
         
         System.out.println("done with test: total updates: " + String.format("%,d", count.get()));
         
-        // Close websockets
         for (int i = 0; i < numClients; i++) {
             CAClient client = clientList.get(i);
             client.close();
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+        executor.shutdown();        
     }
 }
