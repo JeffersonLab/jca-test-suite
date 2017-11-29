@@ -1,6 +1,7 @@
-package org.jlab.jts.integration;
+package org.jlab.jts.integration.clients;
 
 import org.jlab.caclient.caj.CAJClient;
+import org.jlab.jts.integration.TestCase;
 import org.jlab.jts.integration.testcase.HighThroughputTestCase;
 
 /**
