@@ -1,4 +1,4 @@
-package org.jlab.caclient.ws;
+package org.jlab.jts.caclient.ws;
 
 import java.io.StringReader;
 import java.util.concurrent.CompletableFuture;

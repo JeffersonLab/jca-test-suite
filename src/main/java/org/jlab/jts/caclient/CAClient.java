@@ -1,4 +1,4 @@
-package org.jlab.caclient;
+package org.jlab.jts.caclient;
 
 /**
  *

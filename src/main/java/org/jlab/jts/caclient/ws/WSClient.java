@@ -1,4 +1,4 @@
-package org.jlab.caclient.ws;
+package org.jlab.jts.caclient.ws;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,8 +10,8 @@ import javax.websocket.Endpoint;
 import javax.websocket.EndpointConfig;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
-import org.jlab.caclient.CAClient;
-import org.jlab.caclient.ChannelGroup;
+import org.jlab.jts.caclient.CAClient;
+import org.jlab.jts.caclient.ChannelGroup;
 
 /**
  *

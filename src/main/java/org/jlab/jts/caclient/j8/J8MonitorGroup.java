@@ -1,10 +1,10 @@
-package org.jlab.caclient.j8;
+package org.jlab.jts.caclient.j8;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.epics.ca.Monitor;
-import org.jlab.caclient.MonitorGroup;
+import org.jlab.jts.caclient.MonitorGroup;
 
 /**
  *

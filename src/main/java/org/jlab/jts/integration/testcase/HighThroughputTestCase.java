@@ -2,7 +2,7 @@ package org.jlab.jts.integration.testcase;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
-import org.jlab.caclient.CAClient;
+import org.jlab.jts.caclient.CAClient;
 import org.jlab.jts.integration.TestCase;
 import org.jlab.jts.integration.TestCaseRunner;
 

@@ -1,4 +1,4 @@
-package org.jlab.caclient.caj;
+package org.jlab.jts.caclient.caj;
 
 import com.cosylab.epics.caj.CAJChannel;
 import com.cosylab.epics.caj.CAJContext;
@@ -25,8 +25,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
-import org.jlab.caclient.ChannelGroup;
-import org.jlab.caclient.CustomPrefixThreadFactory;
+import org.jlab.jts.caclient.ChannelGroup;
+import org.jlab.jts.caclient.CustomPrefixThreadFactory;
 
 public class CAJChannelGroup implements ChannelGroup {
 

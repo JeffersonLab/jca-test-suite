@@ -4,9 +4,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jlab.caclient.CAClient;
-import org.jlab.caclient.ChannelGroup;
-import org.jlab.caclient.MonitorGroup;
+import org.jlab.jts.caclient.CAClient;
+import org.jlab.jts.caclient.ChannelGroup;
+import org.jlab.jts.caclient.MonitorGroup;
 
 /**
  *

@@ -1,4 +1,4 @@
-package org.jlab.caclient.j8;
+package org.jlab.jts.caclient.j8;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import org.epics.ca.Channel;
 import org.epics.ca.ChannelDescriptor;
 import org.epics.ca.Context;
 import org.epics.ca.Monitor;
-import org.jlab.caclient.ChannelGroup;
+import org.jlab.jts.caclient.ChannelGroup;
 
 public class J8ChannelGroup implements ChannelGroup {
     

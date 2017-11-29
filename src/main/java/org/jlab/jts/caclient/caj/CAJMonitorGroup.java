@@ -1,9 +1,9 @@
-package org.jlab.caclient.caj;
+package org.jlab.jts.caclient.caj;
 
 import com.cosylab.epics.caj.CAJMonitor;
 import gov.aps.jca.CAException;
 import java.util.Map;
-import org.jlab.caclient.MonitorGroup;
+import org.jlab.jts.caclient.MonitorGroup;
 
 /**
  *

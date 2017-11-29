@@ -1,4 +1,4 @@
-package org.jlab.caclient.ws;
+package org.jlab.jts.caclient.ws;
 
 import java.util.function.Consumer;
 

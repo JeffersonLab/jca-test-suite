@@ -1,4 +1,4 @@
-package org.jlab.caclient;
+package org.jlab.jts.caclient;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;

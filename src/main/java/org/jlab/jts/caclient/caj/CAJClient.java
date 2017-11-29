@@ -1,4 +1,4 @@
-package org.jlab.caclient.caj;
+package org.jlab.jts.caclient.caj;
 
 import com.cosylab.epics.caj.CAJContext;
 import gov.aps.jca.CAException;
@@ -6,8 +6,8 @@ import gov.aps.jca.JCALibrary;
 import gov.aps.jca.configuration.DefaultConfiguration;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import org.jlab.caclient.CAClient;
-import org.jlab.caclient.ChannelGroup;
+import org.jlab.jts.caclient.CAClient;
+import org.jlab.jts.caclient.ChannelGroup;
 
 /**
  *

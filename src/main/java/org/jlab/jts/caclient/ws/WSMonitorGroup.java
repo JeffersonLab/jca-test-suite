@@ -1,7 +1,7 @@
-package org.jlab.caclient.ws;
+package org.jlab.jts.caclient.ws;
 
 import java.util.Map;
-import org.jlab.caclient.MonitorGroup;
+import org.jlab.jts.caclient.MonitorGroup;
 
 /**
  *

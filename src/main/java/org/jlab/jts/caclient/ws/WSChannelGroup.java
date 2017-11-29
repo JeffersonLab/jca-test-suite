@@ -1,4 +1,4 @@
-package org.jlab.caclient.ws;
+package org.jlab.jts.caclient.ws;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
-import org.jlab.caclient.ChannelGroup;
+import org.jlab.jts.caclient.ChannelGroup;
 
 public class WSChannelGroup implements ChannelGroup {
     

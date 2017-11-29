@@ -1,9 +1,9 @@
-package org.jlab.caclient.j8;
+package org.jlab.jts.caclient.j8;
 
 import java.util.Properties;
 import org.epics.ca.Context;
-import org.jlab.caclient.CAClient;
-import org.jlab.caclient.ChannelGroup;
+import org.jlab.jts.caclient.CAClient;
+import org.jlab.jts.caclient.ChannelGroup;
 
 public class J8Client implements CAClient {
 

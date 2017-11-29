@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import javax.websocket.DeploymentException;
-import org.jlab.caclient.CAClient;
+import org.jlab.jts.caclient.CAClient;
 import org.jlab.jts.integration.TestCase;
 import org.jlab.jts.integration.TestCaseRunner;
 
