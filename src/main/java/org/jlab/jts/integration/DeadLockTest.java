@@ -38,7 +38,7 @@ public class DeadLockTest {
         int timeoutSeconds = 2;
         int monitorSeconds = 20;
         String[] channelNames = {"counter0", "counter1", "counter2", "counter3", "counter4"};
-        Consumer cnsmr = (value) -> count.incrementAndGet();
+        Consumer<? super Object> cnsmr = (value) -> count.incrementAndGet();
         List<CAClient> clientList = new ArrayList<>();
         int numClients = 100;
         
