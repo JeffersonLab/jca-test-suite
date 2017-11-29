@@ -22,20 +22,28 @@ public class HighConcurrencyTestCase implements TestCase {
 
     private final ExecutorService executor;
     private final CAClient client;
+    private final String[] channelNames;
     
     public HighConcurrencyTestCase(CAClient client) throws DeploymentException, IOException, InterruptedException, Exception {
         
         this.client = client;
         
         executor = Executors.newCachedThreadPool();
+        
+        final int numCounters = 100;
+
+        channelNames = new String[numCounters];
+        
+        for (int i = 0; i < channelNames.length; i++) {
+            channelNames[i] = "counter" + i;
+        }        
     }
 
     @Override
     public void doTest() throws URISyntaxException, DeploymentException, IOException, InterruptedException, Exception {
         AtomicLong count = new AtomicLong();
-        int timeoutSeconds = 3;
+        int timeoutSeconds = 5;
         int monitorSeconds = 20;
-        String[] channelNames = {"counter0", "counter1", "counter2", "counter3", "counter4"};
         Consumer<? super Object> cnsmr = (value) -> count.incrementAndGet();
         List<CAClient> clientList = new ArrayList<>();
         int numClients = 100;
@@ -54,6 +62,7 @@ public class HighConcurrencyTestCase implements TestCase {
         executor.awaitTermination(1, TimeUnit.MINUTES); // Wait at least as long as monitorSeconds...
         
         System.out.println("done with test: total updates: " + String.format("%,d", count.get()));
+        System.out.println("average updates per second: " + String.format("%,.2f", count.get() / Double.valueOf(monitorSeconds)));        
         
         for (int i = 0; i < numClients; i++) {
             CAClient client = clientList.get(i);
