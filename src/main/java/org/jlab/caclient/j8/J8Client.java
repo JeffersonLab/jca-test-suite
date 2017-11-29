@@ -14,7 +14,6 @@ public class J8Client implements CAClient {
         Properties properties = new Properties();
 
         //properties.setProperty(Context.Configuration.EPICS_CA_ADDR_LIST.toString(), "127.0.0.1");
-        //properties.setProperty(Context.Configuration.EPICS_CA_ADDR_LIST.toString(), "129.57.95.151");
         properties.setProperty(Context.Configuration.EPICS_CA_AUTO_ADDR_LIST.toString(), "false");
         //properties.setProperty(Context.Configuration.EPICS_CA_SERVER_PORT.toString(), "5064");
         // SYSTEM properties are different than Context properites
