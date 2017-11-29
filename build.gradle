@@ -10,12 +10,10 @@ repositories {
 
 dependencies {
     compile 'org.glassfish:javax.json:1.1.2'
-    /*compile 'javax.json:javax.json-api:1.1.2'*/
     compile 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13.1'
     compile 'org.epics:jca:2.3.6'
     compile 'org.epics:caj:1.1.15'
     compile 'org.epics:ca:1.0.0'
-    /*compile 'com.google.guava:guava:23.0'*/
     testCompile 'junit:junit:4.12'
 }
 
