@@ -28,12 +28,12 @@ public class WSClient implements CAClient {
         session = container.connectToServer(new Endpoint() {
             @Override
             public void onOpen(Session sn, EndpointConfig ec) {
-                System.out.println("Opened!");
+                //System.out.println("Opened!");
             }
 
             @Override
             public void onClose(Session sn, CloseReason reason) {
-                System.out.println("Closed: " + reason);
+                //System.out.println("Closed: " + reason);
             }
 
             @Override
