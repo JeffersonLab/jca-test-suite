@@ -1,4 +1,4 @@
-package org.jlab.caclient;
+package org.jlab.jts.integration;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,13 +10,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import javax.websocket.DeploymentException;
+import org.jlab.caclient.CAClient;
 import org.jlab.caclient.ws.WSClient;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -26,28 +21,18 @@ public class DeadLockTest {
 
     private ExecutorService executor;
 
-    public DeadLockTest() {
+    public static void main(String[] args) throws Exception {
+        new DeadLockTest();
     }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
+    
+    public DeadLockTest() throws DeploymentException, IOException, InterruptedException, Exception {
         executor = Executors.newCachedThreadPool();
-    }
 
-    @After
-    public void tearDown() {
+        tonsOfConcurrencyTest();
+        
         executor.shutdown();
     }
 
-    @Test
     public void tonsOfConcurrencyTest() throws URISyntaxException, DeploymentException, IOException, InterruptedException, Exception {
         AtomicLong count = new AtomicLong();
         int timeoutSeconds = 2;

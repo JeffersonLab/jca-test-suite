@@ -1,19 +1,16 @@
-package org.jlab.caclient;
+package org.jlab.jts.integration;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
+import org.jlab.caclient.CAClient;
+import org.jlab.caclient.ChannelGroup;
+import org.jlab.caclient.MonitorGroup;
 import org.jlab.caclient.caj.CAJClient;
 import org.jlab.caclient.j8.J8Client;
 import org.jlab.caclient.ws.WSClient;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -25,43 +22,32 @@ public class CAClientTest {
     private final int secondsToSleep = 10;    
     private final String[] channelNames = new String[numCounters];
     
-    public CAClientTest() {
+    public static void main(String[] args) throws Exception {
+        new CAClientTest();
+    }
+    
+    public CAClientTest() throws ExecutionException, TimeoutException, Exception {
         for (int i = 0; i < channelNames.length; i++) {
             channelNames[i] = "counter" + i;
         }             
+        
+        testj5();
+        //testj8();
+        //testws();
     }
     
-    @BeforeClass
-    public static void setUpClass() {       
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {    
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
-    @Test
     public void testj5() throws InterruptedException, ExecutionException, TimeoutException, Exception {
         try (CAClient client = new CAJClient()) {
             doClientTest(client, channelNames);
         }    
     }    
     
-    @Test
     public void testj8() throws InterruptedException, ExecutionException, TimeoutException, Exception {
         try (CAClient client = new J8Client()) {
             doClientTest(client, channelNames);
         }    
     }
 
-    @Test
     public void testws() throws InterruptedException, ExecutionException, TimeoutException, Exception {
         try (CAClient client = new WSClient()) {
             doClientTest(client, channelNames);

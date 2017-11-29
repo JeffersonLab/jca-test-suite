@@ -1,9 +1,12 @@
-package org.jlab.caclient;
+package org.jlab.jts.integration;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jlab.caclient.CAClient;
+import org.jlab.caclient.ChannelGroup;
+import org.jlab.caclient.MonitorGroup;
 
 /**
  *
