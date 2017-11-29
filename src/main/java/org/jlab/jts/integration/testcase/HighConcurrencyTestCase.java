@@ -49,7 +49,9 @@ public class HighConcurrencyTestCase implements TestCase {
             clientList.add(client);
         }
         
-        executor.awaitTermination(1, TimeUnit.HOURS); // Wait for an hour for all stuff to finish
+        executor.shutdown();
+        
+        executor.awaitTermination(1, TimeUnit.MINUTES); // Wait at least as long as monitorSeconds...
         
         System.out.println("done with test: total updates: " + String.format("%,d", count.get()));
         

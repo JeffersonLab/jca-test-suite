@@ -30,7 +30,7 @@ public class CAJClient implements CAClient {
 
         context.initialize();
         
-        context.printInfo();
+        //context.printInfo();
     }
 
     @Override

@@ -39,5 +39,7 @@ public class TestCaseRunner implements Runnable {
         } catch (Exception ex) {
             Logger.getLogger(TestCaseRunner.class.getName()).log(Level.SEVERE, "Test Case Exception:", ex);
         }
+        
+        //System.out.println("done with test runner");
     }
 }

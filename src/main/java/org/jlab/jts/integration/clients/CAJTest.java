@@ -2,7 +2,7 @@ package org.jlab.jts.integration.clients;
 
 import org.jlab.jts.caclient.caj.CAJClient;
 import org.jlab.jts.integration.TestCase;
-import org.jlab.jts.integration.testcase.HelloWorldTestCase;
+import org.jlab.jts.integration.testcase.HighConcurrencyTestCase;
 
 /**
  *
@@ -10,7 +10,7 @@ import org.jlab.jts.integration.testcase.HelloWorldTestCase;
  */
 public class CAJTest {
     public static void main(String[] args) throws Exception {
-        try(TestCase test = new HelloWorldTestCase(new CAJClient())){
+        try(TestCase test = new HighConcurrencyTestCase(new CAJClient())){
             test.doTest();
         }
         

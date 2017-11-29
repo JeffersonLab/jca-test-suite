@@ -16,7 +16,7 @@ public class J8Client implements CAClient {
         properties.setProperty(Context.Configuration.EPICS_CA_ADDR_LIST.toString(), "127.0.0.1");
         properties.setProperty(Context.Configuration.EPICS_CA_AUTO_ADDR_LIST.toString(), "NO");
 
-        properties.setProperty("CA_DEBUG", "1");
+        //properties.setProperty("CA_DEBUG", "1");
         
         // SYSTEM properties are different than Context properites
         System.setProperty("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size", "2");
