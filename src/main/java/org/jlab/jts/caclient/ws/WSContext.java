@@ -46,7 +46,7 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
                 try {
                     while (true) {
                         String msg = outBuffer.take();
-                        System.out.println("Writing Message: " + msg);
+                        //System.out.println("Writing Message: " + msg);
                         try {
                             Future<Void> future = session.getAsyncRemote().sendText(msg);
                             future.get();
