@@ -14,33 +14,20 @@ import java.io.IOException;
 
 public class CAServer {
 
-    /**
-     * JCA server context.
-     */
     private volatile ServerContext context = null;
 
-    /**
-     * Initialize JCA context.
-     *
-     * @throws CAException	throws on any failure.
-     */
     private void initialize() throws CAException {
 
-        // Get the JCALibrary instance.
         JCALibrary jca = JCALibrary.getInstance();
 
-        // Create server implementation
         DefaultServerImpl server = new DefaultServerImpl();
 
-        // Create a context with default configuration values.
         context = jca.createServerContext(JCALibrary.CHANNEL_ACCESS_SERVER_JAVA, server);
 
-        // register process variables
-        //registerProcessVariables(server);
-        registerProcessVariables2(server);
+        registerProcessVariables(server);
     }
 
-    private void registerProcessVariables2(DefaultServerImpl server) {
+    private void registerProcessVariables(DefaultServerImpl server) {
 
         final int numCounters = 100;
 
@@ -53,74 +40,8 @@ public class CAServer {
         server.registerProcessVaribale(counter);
     }
 
-    /**
-     * Register process variables.
-     *
-     * @param server
-     */
-    private void registerProcessVariables(DefaultServerImpl server) {
-
-        // simple in-memory PV
-        server.createMemoryProcessVariable("simple", DBR_Int.TYPE, new int[]{1, 2, 3});
-
-        // PV supporting all GR/CTRL info
-        MemoryProcessVariable mpv = new MemoryProcessVariable("adc01", null, DBR_Double.TYPE, new double[]{12.08, 3.11});
-
-        mpv.setUpperDispLimit(new Double(10));
-        mpv.setLowerDispLimit(new Double(-10));
-
-        mpv.setUpperAlarmLimit(new Double(9));
-        mpv.setLowerAlarmLimit(new Double(-9));
-
-        mpv.setUpperCtrlLimit(new Double(8));
-        mpv.setLowerCtrlLimit(new Double(-8));
-
-        mpv.setUpperWarningLimit(new Double(7));
-        mpv.setLowerWarningLimit(new Double(-7));
-
-        mpv.setUnits("units");
-        mpv.setPrecision((short) 3);
-
-        server.registerProcessVaribale(mpv);
-
-        // enum in-memory PV
-        MemoryProcessVariable enumPV = new MemoryProcessVariable("enum", null, DBR_Enum.TYPE, new short[]{0}) {
-            private final String[] labels
-                    = {"zero", "one", "two", "three", "four", "five", "six", "seven"};
-
-            /* (non-Javadoc)
-			 * @see com.cosylab.epics.caj.cas.util.MemoryProcessVariable#getEnumLabels()
-             */
-            public String[] getEnumLabels() {
-                return labels;
-            }
-
-        };
-        server.registerProcessVaribale(enumPV);
-
-        // counter PV
-        CounterProcessVariable counter = new CounterProcessVariable("counter", null, -10, 10, 1, 1000, -7, 7, -9, 9);
-        server.registerProcessVaribale(counter);
-
-        // fast counter PV
-        //CounterProcessVariable fastCounter = new CounterProcessVariable("fastCounter", null, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, 1, -7, 7, -9, 9);
-        //server.registerProcessVaribale(fastCounter);
-        // simple in-memory 1MB array
-        final int[] arrayValue = new int[1024 * 1024];
-        for (int i = 0; i < arrayValue.length; i++) {
-            arrayValue[i] = i;
-        }
-        server.createMemoryProcessVariable("large", DBR_Int.TYPE, arrayValue);
-    }
-
-    /**
-     * Destroy JCA server context.
-     */
     public void destroy() {
-
         try {
-
-            // Destroy the context, check if never initialized.
             if (context != null) {
                 context.destroy();
             }
@@ -130,17 +51,10 @@ public class CAServer {
         }
     }
 
-    /**
-     * @param channelName
-     */
     public void execute() {
-
         try {
-
-            // initialize context
             initialize();
 
-            // Display basic information about the context.
             System.out.println(context.getVersion().getVersionString());
             context.printInfo();
             System.out.println();
@@ -156,7 +70,6 @@ public class CAServer {
             th.printStackTrace();
         } finally {
             System.out.println("Shutting down...");
-            // always finalize
             destroy();
         }
 
@@ -182,21 +95,8 @@ public class CAServer {
         }
     }
 
-    /**
-     * Program entry point.
-     *
-     * @param args	command-line arguments
-     */
     public static void main(String[] args) {
-        // execute
         CAServer server = new CAServer();
-
-        /*Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                System.out.println("Shutting down server via hook");
-                server.destroy();
-            }
-        });*/
 
         Thread shutdownThread = new Thread() {
             public void run() {
