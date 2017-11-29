@@ -33,7 +33,7 @@ public class HighConcurrencyTestCase implements TestCase {
     @Override
     public void doTest() throws URISyntaxException, DeploymentException, IOException, InterruptedException, Exception {
         AtomicLong count = new AtomicLong();
-        int timeoutSeconds = 2;
+        int timeoutSeconds = 3;
         int monitorSeconds = 20;
         String[] channelNames = {"counter0", "counter1", "counter2", "counter3", "counter4"};
         Consumer<? super Object> cnsmr = (value) -> count.incrementAndGet();
