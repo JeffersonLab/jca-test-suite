@@ -23,12 +23,14 @@ public class CAJClient implements CAClient {
         DefaultConfiguration config = new DefaultConfiguration("config");
 
         config.setAttribute("class", JCALibrary.CHANNEL_ACCESS_JAVA);
-        //config.setAttribute("addr_list", "localhost");
-        //config.setAttribute("auto_addr_list", "false");
+        config.setAttribute("addr_list", "127.0.0.1");
+        config.setAttribute("auto_addr_list", "false");
 
         context = (CAJContext) jca.createContext(config);
 
         context.initialize();
+        
+        context.printInfo();
     }
 
     @Override

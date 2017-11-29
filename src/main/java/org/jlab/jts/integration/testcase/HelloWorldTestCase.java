@@ -23,7 +23,7 @@ public class HelloWorldTestCase implements TestCase {
         
         String[] channelNames = {"counter0"};
         
-        new TestCaseRunner(client, 3, 5, cnsmr, channelNames).run();
+        new TestCaseRunner(client, 1, 1, cnsmr, channelNames).run();
         
         System.out.println("Hello World - Done!");
     }

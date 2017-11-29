@@ -2,7 +2,7 @@ package org.jlab.jts.integration.clients;
 
 import org.jlab.caclient.caj.CAJClient;
 import org.jlab.jts.integration.TestCase;
-import org.jlab.jts.integration.testcase.HighThroughputTestCase;
+import org.jlab.jts.integration.testcase.HelloWorldTestCase;
 
 /**
  *
@@ -10,7 +10,7 @@ import org.jlab.jts.integration.testcase.HighThroughputTestCase;
  */
 public class CAJTest {
     public static void main(String[] args) throws Exception {
-        try(TestCase test = new HighThroughputTestCase(new CAJClient())){
+        try(TestCase test = new HelloWorldTestCase(new CAJClient())){
             test.doTest();
         }
     }
