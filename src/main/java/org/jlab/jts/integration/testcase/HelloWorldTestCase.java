@@ -11,20 +11,22 @@ import org.jlab.jts.integration.TestCaseRunner;
  */
 public class HelloWorldTestCase implements TestCase {
 
-    private final CAClient client;
-    
-    public HelloWorldTestCase(CAClient client) {
-        this.client = client;
+    private final Class<? extends CAClient> clazz;
+
+    public HelloWorldTestCase(Class<? extends CAClient> clazz) {
+        this.clazz = clazz;
     }
-    
+
     @Override
     public void doTest() throws Exception {
         Consumer<? super Object> cnsmr = (value -> System.out.println(value));
-        
+
         String[] channelNames = {"counter0"};
-        
-        new TestCaseRunner(client, 1, 1, cnsmr, channelNames).run();
-        
+
+        try (CAClient client = clazz.newInstance()) {
+            new TestCaseRunner(client, 1, 1, cnsmr, channelNames).run();
+        }
+
         System.out.println("Hello World - Done!");
     }
 
@@ -32,5 +34,5 @@ public class HelloWorldTestCase implements TestCase {
     public void close() throws Exception {
 
     }
-    
+
 }

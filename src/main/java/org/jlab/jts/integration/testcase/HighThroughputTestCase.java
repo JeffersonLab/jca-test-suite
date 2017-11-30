@@ -12,11 +12,11 @@ import org.jlab.jts.integration.TestCaseRunner;
  */
 public class HighThroughputTestCase implements TestCase {
 
-    private final CAClient client;
+    private final Class<? extends CAClient> clazz;
     private final String[] channelNames;
 
-    public HighThroughputTestCase(CAClient client) {
-        this.client = client;
+    public HighThroughputTestCase(Class<? extends CAClient> clazz) {
+        this.clazz = clazz;
 
         final int numCounters = 10;
 
@@ -34,8 +34,10 @@ public class HighThroughputTestCase implements TestCase {
         AtomicLong updates = new AtomicLong();
         Consumer<? super Object> cnsmr = (value -> updates.incrementAndGet());
 
-        new TestCaseRunner(client, timeoutSeconds, monitorSeconds, cnsmr, channelNames).run();
-
+        try(CAClient client = clazz.newInstance()) {
+            new TestCaseRunner(client, timeoutSeconds, monitorSeconds, cnsmr, channelNames).run();
+        }
+        
         System.out.println("done with test: total updates: " + String.format("%,d", updates.get()));
         System.out.println("average updates per second: " + String.format("%,.2f", updates.get() / Double.valueOf(monitorSeconds)));
     }

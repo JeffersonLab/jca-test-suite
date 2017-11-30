@@ -21,12 +21,12 @@ import org.jlab.jts.integration.TestCaseRunner;
 public class HighConcurrencyTestCase implements TestCase {
 
     private final ExecutorService executor;
-    private final CAClient client;
     private final String[] channelNames;
+    private final Class<? extends CAClient> clazz;
     
-    public HighConcurrencyTestCase(CAClient client) throws DeploymentException, IOException, InterruptedException, Exception {
+    public HighConcurrencyTestCase(Class<? extends CAClient> clazz) throws DeploymentException, IOException, InterruptedException, Exception {
         
-        this.client = client;
+        this.clazz = clazz;
         
         executor = Executors.newCachedThreadPool();
         
@@ -50,11 +50,11 @@ public class HighConcurrencyTestCase implements TestCase {
         
         // Create web socket connections
         for (int i = 0; i < numClients; i++) {
-            CAClient c = client.getClass().newInstance();
+            CAClient c = clazz.newInstance();
             
             executor.execute(new TestCaseRunner(c, timeoutSeconds, monitorSeconds, cnsmr, channelNames));
             
-            clientList.add(client);
+            clientList.add(c);
         }
         
         executor.shutdown();
