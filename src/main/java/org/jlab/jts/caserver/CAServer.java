@@ -6,10 +6,17 @@ import gov.aps.jca.cas.ServerContext;
 
 import com.cosylab.epics.caj.cas.util.DefaultServerImpl;
 import com.cosylab.epics.caj.cas.util.examples.CounterProcessVariable;
+import gov.aps.jca.event.ContextExceptionEvent;
+import gov.aps.jca.event.ContextExceptionListener;
+import gov.aps.jca.event.ContextVirtualCircuitExceptionEvent;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CAServer {
 
+    private static final Logger LOGGER = Logger.getLogger(CAServer.class.getName());    
+    
     private volatile ServerContext context = null;
 
     private void initialize() throws CAException {
@@ -29,6 +36,20 @@ public class CAServer {
         context = jca.createServerContext(JCALibrary.CHANNEL_ACCESS_SERVER_JAVA, server);
 
         registerProcessVariables(server);
+        
+        context.addContextExceptionListener(new ContextExceptionListener() {
+            @Override
+            public void contextException(ContextExceptionEvent ev) {
+                LOGGER.log(Level.WARNING, "Context Exception: {0}", ev.getMessage());
+                LOGGER.log(Level.WARNING, "Channel: {0}", ev.getChannel() == null ? "Unknown" : ev.getChannel().getName());
+            }
+
+            @Override
+            public void contextVirtualCircuitException(ContextVirtualCircuitExceptionEvent ev) {
+                LOGGER.log(Level.SEVERE, "Context Virtual Circuit Exception: {0}", ev.getStatus());
+                LOGGER.log(Level.SEVERE, "Address: {0}", ev.getVirtualCircuit());
+            }
+        });
     }
 
     private void registerProcessVariables(DefaultServerImpl server) {
