@@ -18,3 +18,8 @@ gradlew build
 ``
 
 The build script does everything including downloading all dependencies from the Internet.
+
+## How to run tests
+
+1. First run CAServer
+2. Next run one of the clients
