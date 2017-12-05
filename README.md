@@ -8,7 +8,7 @@ A project for testing the correctness and performance of the EPICS CA software f
 On Windows run:
 
 ``
-gradlew.bat bulid
+gradlew.bat build
 ``
 
 On UNIX run:
