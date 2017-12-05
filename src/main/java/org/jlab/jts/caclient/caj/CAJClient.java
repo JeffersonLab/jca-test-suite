@@ -40,6 +40,6 @@ public class CAJClient implements CAClient {
 
     @Override
     public void close() throws Exception {
-        context.dispose();
+        context.destroy();
     }
 }

@@ -42,8 +42,8 @@ public class HighConcurrencyTestCase implements TestCase {
     @Override
     public void doTest() throws URISyntaxException, DeploymentException, IOException, InterruptedException, Exception {
         AtomicLong count = new AtomicLong();
-        int timeoutSeconds = 5;
-        int monitorSeconds = 20;
+        int timeoutSeconds = 10;
+        int monitorSeconds = 45;
         Consumer<? super Object> cnsmr = (value) -> count.incrementAndGet();
         List<CAClient> clientList = new ArrayList<>();
         int numClients = 100;

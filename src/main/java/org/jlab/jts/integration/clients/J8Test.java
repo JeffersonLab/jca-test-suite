@@ -5,6 +5,7 @@ import org.jlab.jts.caclient.j8.J8Client;
 import org.jlab.jts.integration.TestCase;
 import org.jlab.jts.integration.testcase.HelloWorldTestCase;
 import org.jlab.jts.integration.testcase.HighConcurrencyTestCase;
+import org.jlab.jts.integration.testcase.HighThroughputTestCase;
 
 /**
  *
@@ -14,7 +15,7 @@ public class J8Test {
     public static void main(String[] args) throws Exception {
         Class<? extends CAClient> clazz = J8Client.class;        
         
-        try(TestCase test = new HighConcurrencyTestCase(clazz)){
+        try(TestCase test = new HighThroughputTestCase(clazz)){
             test.doTest();
         }
         

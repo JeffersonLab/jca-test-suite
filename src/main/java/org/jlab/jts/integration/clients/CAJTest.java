@@ -4,6 +4,7 @@ import org.jlab.jts.caclient.CAClient;
 import org.jlab.jts.caclient.caj.CAJClient;
 import org.jlab.jts.integration.TestCase;
 import org.jlab.jts.integration.testcase.HighConcurrencyTestCase;
+import org.jlab.jts.integration.testcase.HighThroughputTestCase;
 
 /**
  *
@@ -13,7 +14,7 @@ public class CAJTest {
     public static void main(String[] args) throws Exception {
         Class<? extends CAClient> clazz = CAJClient.class;           
         
-        try(TestCase test = new HighConcurrencyTestCase(clazz)){
+        try(TestCase test = new HighThroughputTestCase(clazz)){
             test.doTest();
         }
         

@@ -1,6 +1,8 @@
 package org.jlab.jts.caclient.ws;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -81,6 +83,92 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
         outBuffer.add(json.build().toString());
 
         return channel.connectFuture;
+    }
+
+    CompletableFuture<?> connectMultipleAsync(List<WSChannel> channels) {
+        JsonObjectBuilder json = Json.createObjectBuilder();
+        JsonArrayBuilder array = Json.createArrayBuilder();
+        List<CompletableFuture<?>> futureList = new ArrayList<>();
+
+        int count = 0;
+
+        for (WSChannel channel : channels) {
+
+            WSChannel existing = monitoredChannelsMap.putIfAbsent(channel.getName(), channel);
+            if (existing != null) {
+                throw new RuntimeException("Already monitoring channel: " + channel.getName());
+            }
+
+            array.add(channel.getName());
+            futureList.add(channel.connectFuture);
+
+            // You'll get close reason 1009 'message too big' if you're not careful so we batch send 400 pv names at a time.
+            count++;
+
+            if (count > 400) {
+                json.add("type", "monitor");
+                json.add("pvs", array);
+
+                String msg = json.build().toString();
+
+                outBuffer.add(msg);
+
+                count = 0;
+                json = Json.createObjectBuilder();
+                array = Json.createArrayBuilder();
+            }
+
+        }
+
+        if (count > 0) {
+            json.add("type", "monitor");
+            json.add("pvs", array);
+
+            String msg = json.build().toString();
+
+            outBuffer.add(msg);
+        }
+
+        return CompletableFuture.allOf(futureList.toArray(new CompletableFuture<?>[0]));
+    }
+
+    void closeMultiple(List<WSChannel> channels) {
+        JsonObjectBuilder json = Json.createObjectBuilder();
+        JsonArrayBuilder array = Json.createArrayBuilder();
+
+        int count = 0;
+
+        for (WSChannel channel : channels) {
+
+            array.add(channel.getName());
+
+            WSChannel existing = monitoredChannelsMap.remove(channel.getName());
+            if (existing == null) {
+                LOGGER.log(Level.INFO, "Channel is already closed: {0}", channel.getName());
+                return;
+            }
+
+            // You'll get close reason 1009 'message too big' if you're not careful so we batch send 400 pv names at a time.
+            count++;
+
+            if (count > 400) {
+                json.add("type", "clear");
+                json.add("pvs", array);
+
+                outBuffer.add(json.build().toString());
+                
+                count = 0;
+                json = Json.createObjectBuilder();
+                array = Json.createArrayBuilder();                
+            }
+        }
+
+        if (count > 0) {
+            json.add("type", "clear");
+            json.add("pvs", array);
+
+            outBuffer.add(json.build().toString());
+        }
     }
 
     void close(WSChannel channel) {
@@ -165,7 +253,7 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
         outBuffer.clear();
         sender.shutdownNow();
         boolean exited = sender.awaitTermination(100, TimeUnit.MILLISECONDS);
-        if(!exited) {
+        if (!exited) {
             LOGGER.log(Level.WARNING, "Sender thread didn't quit");
         }
     }

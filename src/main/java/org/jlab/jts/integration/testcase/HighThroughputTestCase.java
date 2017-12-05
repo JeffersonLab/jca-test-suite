@@ -18,7 +18,7 @@ public class HighThroughputTestCase implements TestCase {
     public HighThroughputTestCase(Class<? extends CAClient> clazz) {
         this.clazz = clazz;
 
-        final int numCounters = 10;
+        final int numCounters = 5000;
 
         channelNames = new String[numCounters];
         
@@ -29,8 +29,8 @@ public class HighThroughputTestCase implements TestCase {
 
     @Override
     public void doTest() throws InterruptedException, Exception {
-        int timeoutSeconds = 3;
-        int monitorSeconds = 10;
+        int timeoutSeconds = 5;
+        int monitorSeconds = 30;
         AtomicLong updates = new AtomicLong();
         Consumer<? super Object> cnsmr = (value -> updates.incrementAndGet());
 

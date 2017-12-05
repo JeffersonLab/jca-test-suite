@@ -1,5 +1,6 @@
 package org.jlab.jts.caserver;
 
+import static com.cosylab.epics.caj.cas.CAJServerContext.CAJ_SINGLE_THREADED_MODEL;
 import gov.aps.jca.CAException;
 import gov.aps.jca.JCALibrary;
 import gov.aps.jca.cas.ServerContext;
@@ -24,6 +25,9 @@ public class CAServer {
         System.setProperty("com.cosylab.epics.caj.cas.CAJServerContext.ignore_addr_list",  "127.0.0.1:5064 localhost:5064");   
         //System.setProperty("com.cosylab.epics.caj.cas.CAJServerContext.beacon_addr_list",  "");
         //System.setProperty("com.cosylab.epics.caj.cas.CAJServerContext.auto_beacon_addr_list",  "false");        
+        
+        // Let's slow everything down on purpose!
+        //System.setProperty(CAJ_SINGLE_THREADED_MODEL, CAJ_SINGLE_THREADED_MODEL);
         
         JCALibrary jca = JCALibrary.getInstance();
 
@@ -54,7 +58,7 @@ public class CAServer {
 
     private void registerProcessVariables(DefaultServerImpl server) {
 
-        final int numCounters = 100;
+        final int numCounters = 5000;
 
         for (int i = 0; i < numCounters; i++) {
             CounterProcessVariable counter = new CounterProcessVariable("counter" + i, null, 0, Integer.MAX_VALUE, 1, 10, 10, 20, 0, 100);

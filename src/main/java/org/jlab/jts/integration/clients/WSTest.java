@@ -5,6 +5,7 @@ import org.jlab.jts.caclient.ws.WSClient;
 import org.jlab.jts.integration.TestCase;
 import org.jlab.jts.integration.testcase.HelloWorldTestCase;
 import org.jlab.jts.integration.testcase.HighConcurrencyTestCase;
+import org.jlab.jts.integration.testcase.HighThroughputTestCase;
 
 /**
  *
@@ -16,7 +17,7 @@ public class WSTest {
         
         Class<? extends CAClient> clazz = WSClient.class;
         
-        try (TestCase test = new HelloWorldTestCase(clazz)) {
+        try (TestCase test = new HighThroughputTestCase(clazz)) {
             test.doTest();
         }
         

@@ -28,17 +28,17 @@ public class WSClient implements CAClient {
         session = container.connectToServer(new Endpoint() {
             @Override
             public void onOpen(Session sn, EndpointConfig ec) {
-                //System.out.println("Opened!");
+                System.out.println("Web Socket Session Opened");
             }
 
             @Override
             public void onClose(Session sn, CloseReason reason) {
-                //System.out.println("Closed: " + reason);
+                System.out.println("Web Socket Session Closed; Reason: " + reason);
             }
 
             @Override
             public void onError(Session sn, Throwable thrwbl) {
-                System.err.println("Error!");
+                System.err.println("Web Socket Session Error");
                 thrwbl.printStackTrace();
             }
         }, new URI("ws://127.0.0.1:8084/epics2web/monitor"));

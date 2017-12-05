@@ -10,11 +10,16 @@ import org.jlab.jts.caclient.ChannelGroup;
 
 public class WSChannelGroup implements ChannelGroup {
     
+    private final WSContext context;
     private final Map<String, WSChannel> internalMap = new HashMap<>();
+    
+    private WSChannelGroup(WSContext context) {
+        this.context = context;
+    }    
     
     public static WSChannelGroup create(WSContext context, String... channelNames) {
         
-        WSChannelGroup cm = new WSChannelGroup();
+        WSChannelGroup cm = new WSChannelGroup(context);
         
         for (int i = 0; i < channelNames.length; i++) {
             WSChannel c = context.create(channelNames[i]);
@@ -26,14 +31,14 @@ public class WSChannelGroup implements ChannelGroup {
     
     @Override
     public CompletableFuture<?> connectAsync() {
-        List<CompletableFuture<?>> futureList = new ArrayList<>();
+        /*List<CompletableFuture<?>> futureList = new ArrayList<>();
         
         for (WSChannel c : internalMap.values()) {
             CompletableFuture<?> future = c.connectAsync();
             futureList.add(future);
-        }        
+        }*/         
         
-        return CompletableFuture.allOf(futureList.toArray(new CompletableFuture<?>[0]));
+        return context.connectMultipleAsync(new ArrayList<>(internalMap.values()));
     }
     
     @Override
@@ -50,7 +55,10 @@ public class WSChannelGroup implements ChannelGroup {
     
     @Override
     public void close() {
-        RuntimeException closeException = new RuntimeException("Unable to close channel");
+        
+        context.closeMultiple(new ArrayList<>(internalMap.values()));
+        
+        /*RuntimeException closeException = new RuntimeException("Unable to close channel");
         for (WSChannel c : internalMap.values()) {
             try {
                 c.close();
@@ -61,6 +69,6 @@ public class WSChannelGroup implements ChannelGroup {
         
         if (closeException.getSuppressed().length > 0) {
             throw closeException;
-        }
+        }*/
     }
 }

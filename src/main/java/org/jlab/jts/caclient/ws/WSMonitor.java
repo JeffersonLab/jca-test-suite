@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 public class WSMonitor implements AutoCloseable{
 
     private final Consumer<? super Object> cnsmr;
+    private volatile boolean open = true;
     
     WSMonitor(Consumer<? super Object> cnsmr) {
         this.cnsmr = cnsmr;
@@ -16,11 +17,13 @@ public class WSMonitor implements AutoCloseable{
 
     @Override
     public void close() throws Exception {
-
+        open = false;
     }
 
     void update(Object value) {
-        cnsmr.accept(value);
+        if(open) { // Don't count updates after monitor close called
+            cnsmr.accept(value);
+        }
     }
     
 }
