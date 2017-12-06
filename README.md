@@ -20,6 +20,18 @@ gradlew build
 The build script does everything including downloading all dependencies from the Internet.
 
 ## How to run tests
+Assumes UNIX.  Append ".bat" to gradlew if on Windows.
 
 1. First run CAServer
+
+``
+gradlew run
+``
+
 2. Next run one of the clients
+
+3. Stop the CAServer
+
+``
+gradlew stop
+``
