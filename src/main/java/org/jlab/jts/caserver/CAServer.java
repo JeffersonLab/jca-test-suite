@@ -11,8 +11,17 @@ import gov.aps.jca.event.ContextExceptionEvent;
 import gov.aps.jca.event.ContextExceptionListener;
 import gov.aps.jca.event.ContextVirtualCircuitExceptionEvent;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
+import org.jlab.jts.caserver.jmx.ServerKiller;
+import org.jlab.jts.caserver.jmx.ServerKillerMBean;
 
 public class CAServer {
 
@@ -102,24 +111,19 @@ public class CAServer {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
+
+        
         CAServer server = new CAServer();
+        
+        // JMX management object for shutting the server down cleanly
+        ServerKillerMBean monitor = new ServerKiller(server);
+        MBeanServer mbserver = ManagementFactory.getPlatformMBeanServer();
+        ObjectName name = new ObjectName("org.jlab.jts.caserver.jmx:type=ServerKiller");
+        mbserver.registerMBean(monitor, name);
 
-        Thread shutdownThread = new Thread() {
-            public void run() {
-                System.out.println("hit enter key to shutdown");
-                try {
-                    System.in.read();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                server.destroy();
-                //System.exit(0);                
-            }
-        };
 
-        shutdownThread.start();
-
+        // Start
         server.execute();
     }
 

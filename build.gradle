@@ -17,8 +17,21 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-mainClassName = 'org.jlab.caserver.CAServer'
-
 compileJava {
     options.compilerArgs += ["-Xlint:unchecked"]
+}
+
+mainClassName = 'org.jlab.jts.caserver.CAServer'
+
+applicationDefaultJvmArgs = [\
+"-Dcom.sun.management.jmxremote", \
+"-Dcom.sun.management.jmxremote.port=9999",
+"-Dcom.sun.management.jmxremote.authenticate=false",
+"-Dcom.sun.management.jmxremote.ssl=false"]
+
+task stop (type: JavaExec){
+    group 'Run'
+    description 'Stop the CA test Server'
+    main = 'org.jlab.jts.caserver.StopServer'
+    classpath = sourceSets.main.runtimeClasspath
 }
