@@ -24,11 +24,32 @@ Assumes UNIX.  Append ".bat" to gradlew if on Windows.
 
 1. First run CAServer
 
+The server creates 5,000 integer counter PVs which update at 100 times a second.  The PVs are named counter0, counter1, etc.
+
 ``
 gradlew run
 ``
 
 2. Next run one of the clients
+
+``
+gradlew client -Pclientargs=caj,hello
+``
+Where "caj" can be substituted for one of the clients and "hello" can be substituted for one of the tests
+
+### Clients
+| Client | Description |
+|--------|-------------|
+| caj    | JCA/CAJ     |
+| j8     | Java 8 CA   |
+| ws     | Web Socket  |
+
+### Tests
+| Test        | Description |
+|-------------|-------------|
+| hello       | Connects to counter0 PV for a few seconds |
+| throughput  | Connects to 5,000 unique counter PVs for 30 seconds |
+| concurrency | Launches 100 internal clients, which then monitor 100 unique PVs each for 30 seconds |
 
 3. Stop the CAServer
 
