@@ -29,9 +29,19 @@ applicationDefaultJvmArgs = [\
 "-Dcom.sun.management.jmxremote.authenticate=false",
 "-Dcom.sun.management.jmxremote.ssl=false"]
 
-task stop (type: JavaExec){
-    group 'Run'
+task stop (type: JavaExec) {
+    group 'Application'
     description 'Stop the CA test Server'
     main = 'org.jlab.jts.caserver.StopServer'
     classpath = sourceSets.main.runtimeClasspath
+}
+
+task client (type: JavaExec) {
+    group 'Application'
+    description 'Run an integration test client'
+    main = 'org.jlab.jts.caclient.CAClient'
+    classpath = sourceSets.main.runtimeClasspath
+    if(project.hasProperty('clientargs')){
+        args(clientargs.split(','))
+    }    
 }
