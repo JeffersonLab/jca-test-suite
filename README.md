@@ -52,6 +52,8 @@ Where "caj" can be substituted for one of the clients and "hello" can be substit
 | throughput  | Connects to 5,000 unique counter PVs for 30 seconds |
 | concurrency | Launches 100 internal clients, which then monitor 100 unique PVs each for 30 seconds |
 
+Note: the "ws" client requires epics2web to be running.
+
 3. Stop the CAServer
 
 ``
