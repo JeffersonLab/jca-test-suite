@@ -35,6 +35,7 @@ gradlew run
 ``
 gradlew client -Pclientargs=caj,hello
 ``
+
 Where "caj" can be substituted for one of the clients and "hello" can be substituted for one of the tests
 
 ### Clients
