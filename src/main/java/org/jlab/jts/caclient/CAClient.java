@@ -7,6 +7,7 @@ import org.jlab.jts.integration.TestCase;
 import org.jlab.jts.integration.testcase.HelloWorldTestCase;
 import org.jlab.jts.integration.testcase.HighConcurrencyTestCase;
 import org.jlab.jts.integration.testcase.HighThroughputTestCase;
+import org.jlab.jts.integration.testcase.SlowClientTestCase;
 
 /**
  *
@@ -49,6 +50,9 @@ public interface CAClient extends AutoCloseable {
                     break;
                 case "concurrency":
                     testClazz = HighConcurrencyTestCase.class;
+                    break;
+                case "slow":
+                    testClazz = SlowClientTestCase.class;
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown test: " + testStr);
