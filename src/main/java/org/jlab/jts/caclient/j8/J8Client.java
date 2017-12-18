@@ -47,9 +47,9 @@ public class J8Client implements CAClient {
         }
 
         // This is a convenience to avoid having to set -Dorg.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size on the java command line
-        if (CLIENT_PROPERTIES.get("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size") != null) {
+        if (CLIENT_PROPERTIES.getProperty("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size") != null) {
             System.setProperty("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size",
-                    (String) CLIENT_PROPERTIES.get("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size"));
+                    (String) CLIENT_PROPERTIES.getProperty("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size"));
         }
     }
 
