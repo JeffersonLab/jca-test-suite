@@ -45,12 +45,15 @@ public class J8Client implements CAClient {
         } catch (IOException e) {
             LOGGER.log(Level.INFO, "User properties j8client.properties not found, using defaults");
         }
+
+        // This is a convenience to avoid having to set -Dorg.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size on the java command line
+        if (CLIENT_PROPERTIES.get("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size") != null) {
+            System.setProperty("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size",
+                    (String) CLIENT_PROPERTIES.get("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size"));
+        }
     }
 
     public J8Client() {
-        // SYSTEM properties are different than Context properites
-        //System.setProperty("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size", "2");
-
         context = new Context(CLIENT_PROPERTIES);
     }
 
