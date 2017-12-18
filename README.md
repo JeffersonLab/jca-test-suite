@@ -55,6 +55,9 @@ Where "caj" can be substituted for one of the clients and "hello" can be substit
 
 Note: the "ws" client requires epics2web to be running.
 
+### Configuration
+You can configure the URL to epics2web by copying the config/wsclient-default.properties to a new file named wsclient.properties and modifying the epics2web_monitor_url property.  The default is localhost port 8080 at path /epics2web/monitor.  The new properties file must be in the classpath, such as by keeping it in the config directory.
+
 3. Stop the CAServer
 
 ``
