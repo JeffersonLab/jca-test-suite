@@ -59,9 +59,11 @@ Note: the "ws" client requires epics2web to be running.
 #### WSClient
 You can configure the URL to epics2web by copying the config/wsclient-default.properties to a new file named wsclient.properties and modifying the epics2web_monitor_url property.  The default is localhost port 8080 at path /epics2web/monitor.  The new properties file must be in the classpath, such as by keeping it in the config directory.
 #### J8Client
-You can create a file named j8client.properties and include it in the config directory to control configuration of the J8Client.  the options are described [here](https://github.com/channelaccess/ca).   The defaults set in config/j8client-default.properties are to look for the CAServer on localhost only.
+You can create a file named j8client.properties and include it in the config directory to control configuration of the J8Client.  The options are described [here](https://github.com/channelaccess/ca).   The defaults set in config/j8client-default.properties are to look for the CAServer on localhost only.
 
 As a convenience to avoid having to set the system property -Dorg.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size on the java command line that option will be honored if found in the properties file.
+#### CAJClient
+You can create a file named cajclient.properties and include it in the config directory to control configuration of the CAJClient.  The defaults set in config/cajclient-default.properties are to look for the CAServer on localhost only.
 
 3. Stop the CAServer
 
