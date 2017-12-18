@@ -19,7 +19,7 @@ public class J8Client implements CAClient {
         //properties.setProperty("CA_DEBUG", "1");
         
         // SYSTEM properties are different than Context properites
-        System.setProperty("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size", "2");
+        //System.setProperty("org.epics.ca.impl.reactor.lf.LeaderFollowersThreadPool.thread_pool_size", "2");
 
         context = new Context(properties);
     }

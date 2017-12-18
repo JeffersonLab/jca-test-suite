@@ -3,3 +3,4 @@
 /manifest.mf
 /.nb-gradle/
 /.gradle/
+/config/wsclient.properties

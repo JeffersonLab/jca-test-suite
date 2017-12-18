@@ -15,6 +15,7 @@ dependencies {
     compile 'org.epics:caj:1.1.15'
     compile 'org.epics:ca:1.0.0'
     testCompile 'junit:junit:4.12'
+    runtime files('config')
 }
 
 compileJava {
