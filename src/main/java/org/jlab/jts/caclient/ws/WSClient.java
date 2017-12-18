@@ -30,10 +30,7 @@ public class WSClient implements CAClient {
             WSClient.class.getName());
     
     private static final Properties DEFAULT_PROPERTIES = new Properties();
-
-    /**
-     * The client's configuration properties.
-     */
+    
     public static final Properties CLIENT_PROPERTIES;
     
     static {
