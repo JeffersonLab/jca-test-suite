@@ -52,6 +52,7 @@ Where "caj" can be substituted for one of the clients and "hello" can be substit
 | throughput  | Connects to 5,000 unique counter PVs for 30 seconds |
 | concurrency | Launches 100 internal clients, which then monitor 100 unique PVs each for 30 seconds |
 | slow        | Similar to throughput test, but update callback puts thread to sleep for 10 seconds to slow things down; additionally ws client application recv-q buffer size is set to 512 bytes from default of 4MB so that backpressure is created much more quickly for ws client (caj and j8 don't have an application recv-q buffer, just OS recv-q) |
+| staggered   | Creates 5 clients per second until 1000 have been created, and each one only monitors 5 channels for 3 seconds.  This creates a flurry of connection and disconnection events. |
 
 Note: the "ws" client requires epics2web to be running.
 
