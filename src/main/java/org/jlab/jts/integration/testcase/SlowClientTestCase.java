@@ -47,9 +47,7 @@ public class SlowClientTestCase implements TestCase {
         // For WebSocket client set the application level recv Q size very small so we quickly put back pressure on epics2web; else Tyrus will buffer 4MB or more
         ContainerProvider.getWebSocketContainer().setDefaultMaxTextMessageBufferSize(512);        
         
-        try(CAClient client = clazz.newInstance()) {
-            new TestCaseRunner(client, timeoutSeconds, monitorSeconds, cnsmr, channelNames).run();
-        }
+        new TestCaseRunner(clazz, timeoutSeconds, monitorSeconds, cnsmr, channelNames).run();
         
         System.out.println("done with test: total updates: " + String.format("%,d", updates.get()));
         System.out.println("average updates per second: " + String.format("%,.2f", updates.get() / Double.valueOf(monitorSeconds)));

@@ -34,9 +34,7 @@ public class HighThroughputTestCase implements TestCase {
         AtomicLong updates = new AtomicLong();
         Consumer<? super Object> cnsmr = (value -> updates.incrementAndGet());
 
-        try(CAClient client = clazz.newInstance()) {
-            new TestCaseRunner(client, timeoutSeconds, monitorSeconds, cnsmr, channelNames).run();
-        }
+        new TestCaseRunner(clazz, timeoutSeconds, monitorSeconds, cnsmr, channelNames).run();
         
         System.out.println("done with test: total updates: " + String.format("%,d", updates.get()));
         System.out.println("average updates per second: " + String.format("%,.2f", updates.get() / Double.valueOf(monitorSeconds)));

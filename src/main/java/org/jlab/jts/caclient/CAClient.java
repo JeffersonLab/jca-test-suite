@@ -8,13 +8,14 @@ import org.jlab.jts.integration.testcase.HelloWorldTestCase;
 import org.jlab.jts.integration.testcase.HighConcurrencyTestCase;
 import org.jlab.jts.integration.testcase.HighThroughputTestCase;
 import org.jlab.jts.integration.testcase.SlowClientTestCase;
+import org.jlab.jts.integration.testcase.StaggeredClientsTestCase;
 
 /**
  *
  * @author slominskir
  */
 public interface CAClient extends AutoCloseable {
-    
+
     public ChannelGroup create(String[] channelNames);
     
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, Exception {
@@ -53,6 +54,9 @@ public interface CAClient extends AutoCloseable {
                     break;
                 case "slow":
                     testClazz = SlowClientTestCase.class;
+                    break;
+                case "staggered":
+                    testClazz = StaggeredClientsTestCase.class;
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown test: " + testStr);

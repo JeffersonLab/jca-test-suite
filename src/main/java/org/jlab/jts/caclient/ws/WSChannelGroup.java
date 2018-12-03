@@ -2,7 +2,6 @@ package org.jlab.jts.caclient.ws;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -55,20 +54,6 @@ public class WSChannelGroup implements ChannelGroup {
     
     @Override
     public void close() {
-        
         context.closeMultiple(new ArrayList<>(internalMap.values()));
-        
-        /*RuntimeException closeException = new RuntimeException("Unable to close channel");
-        for (WSChannel c : internalMap.values()) {
-            try {
-                c.close();
-            } catch (Exception e) {
-                closeException.addSuppressed(e);
-            }
-        }
-        
-        if (closeException.getSuppressed().length > 0) {
-            throw closeException;
-        }*/
     }
 }

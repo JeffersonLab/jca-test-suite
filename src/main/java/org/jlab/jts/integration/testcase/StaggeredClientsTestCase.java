@@ -2,6 +2,8 @@ package org.jlab.jts.integration.testcase;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -16,19 +18,19 @@ import org.jlab.jts.integration.TestCaseRunner;
  *
  * @author slominskir
  */
-public class HighConcurrencyTestCase implements TestCase {
+public class StaggeredClientsTestCase implements TestCase {
 
     private final ExecutorService executor;
     private final String[] channelNames;
     private final Class<? extends CAClient> clazz;
     
-    public HighConcurrencyTestCase(Class<? extends CAClient> clazz) throws DeploymentException, IOException, InterruptedException, Exception {
+    public StaggeredClientsTestCase(Class<? extends CAClient> clazz) throws DeploymentException, IOException, InterruptedException, Exception {
         
         this.clazz = clazz;
         
         executor = Executors.newCachedThreadPool();
         
-        final int numCounters = 100;
+        final int numCounters = 5;
 
         channelNames = new String[numCounters];
         
@@ -41,13 +43,15 @@ public class HighConcurrencyTestCase implements TestCase {
     public void doTest() throws URISyntaxException, DeploymentException, IOException, InterruptedException, Exception {
         AtomicLong count = new AtomicLong();
         int timeoutSeconds = 10;
-        int monitorSeconds = 45;
+        int monitorSeconds = 3;
         Consumer<? super Object> cnsmr = (value) -> count.incrementAndGet();
-        int numClients = 100;
+        int numClients = 1000;
         
         // Create web socket connections
-        for (int i = 0; i < numClients; i++) {
+        for (int i = 0; i < numClients; i++) {            
             executor.execute(new TestCaseRunner(clazz, timeoutSeconds, monitorSeconds, cnsmr, channelNames));
+            
+            Thread.sleep(200); // Create five new clients per second            
         }
         
         executor.shutdown();

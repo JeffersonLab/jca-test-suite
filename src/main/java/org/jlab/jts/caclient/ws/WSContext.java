@@ -6,12 +6,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
@@ -32,36 +27,23 @@ import javax.websocket.Session;
 public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
 
     private static final Logger LOGGER = Logger.getLogger(WSContext.class.getName());
-    private final ExecutorService sender = Executors.newSingleThreadExecutor();
     private final Session session;
-    private final LinkedBlockingQueue<String> outBuffer = new LinkedBlockingQueue<>();
     private final ConcurrentHashMap<String, WSChannel> monitoredChannelsMap = new ConcurrentHashMap<>();
 
     public WSContext(Session session) {
         this.session = session;
 
         session.addMessageHandler(this);
+    }
 
-        sender.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        String msg = outBuffer.take();
-                        //System.out.println("Writing Message: " + msg);
-                        try {
-                            Future<Void> future = session.getAsyncRemote().sendText(msg);
-                            future.get();
-                        } catch (ExecutionException | IllegalStateException ee) {
-                            LOGGER.log(Level.SEVERE, "Unable to transmit message", ee);
-                            break;
-                        }
-                    }
-                } catch (InterruptedException ie) {
-                    LOGGER.log(Level.INFO, "Sender thread interrupted and is now exiting");
-                }
-            }
-        });
+    public synchronized void send(String json) {
+        System.out.println("Writing Message: " + json);
+        try {
+            Future<Void> future = session.getAsyncRemote().sendText(json);
+            future.get();
+        } catch (ExecutionException | IllegalStateException | InterruptedException ee) {
+            LOGGER.log(Level.SEVERE, "Unable to transmit message", ee);
+        }
     }
 
     public WSChannel create(String name) {
@@ -80,7 +62,7 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
             throw new RuntimeException("Already monitoring channel: " + channel.getName());
         }
 
-        outBuffer.add(json.build().toString());
+        send(json.build().toString());
 
         return channel.connectFuture;
     }
@@ -111,7 +93,7 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
 
                 String msg = json.build().toString();
 
-                outBuffer.add(msg);
+                send(msg);
 
                 count = 0;
                 json = Json.createObjectBuilder();
@@ -126,7 +108,7 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
 
             String msg = json.build().toString();
 
-            outBuffer.add(msg);
+            send(msg);
         }
 
         return CompletableFuture.allOf(futureList.toArray(new CompletableFuture<?>[0]));
@@ -145,7 +127,7 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
             WSChannel existing = monitoredChannelsMap.remove(channel.getName());
             if (existing == null) {
                 LOGGER.log(Level.INFO, "Channel is already closed: {0}", channel.getName());
-                return;
+                continue;
             }
 
             // You'll get close reason 1009 'message too big' if you're not careful so we batch send 400 pv names at a time.
@@ -155,11 +137,11 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
                 json.add("type", "clear");
                 json.add("pvs", array);
 
-                outBuffer.add(json.build().toString());
-                
+                send(json.build().toString());
+
                 count = 0;
                 json = Json.createObjectBuilder();
-                array = Json.createArrayBuilder();                
+                array = Json.createArrayBuilder();
             }
         }
 
@@ -167,7 +149,7 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
             json.add("type", "clear");
             json.add("pvs", array);
 
-            outBuffer.add(json.build().toString());
+            send(json.build().toString());
         }
     }
 
@@ -184,7 +166,7 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
             return;
         }
 
-        outBuffer.add(json.build().toString());
+        send(json.build().toString());
     }
 
     @Override
@@ -250,11 +232,6 @@ public class WSContext implements MessageHandler.Whole<String>, AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        outBuffer.clear();
-        sender.shutdownNow();
-        boolean exited = sender.awaitTermination(100, TimeUnit.MILLISECONDS);
-        if (!exited) {
-            LOGGER.log(Level.WARNING, "Sender thread didn't quit");
-        }
+        // Check if channels are closed?
     }
 }

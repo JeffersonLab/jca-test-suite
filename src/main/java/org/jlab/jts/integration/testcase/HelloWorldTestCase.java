@@ -23,9 +23,7 @@ public class HelloWorldTestCase implements TestCase {
 
         String[] channelNames = {"counter0"};
 
-        try (CAClient client = clazz.newInstance()) {
-            new TestCaseRunner(client, 1, 1, cnsmr, channelNames).run();
-        }
+        new TestCaseRunner(clazz, 1, 1, cnsmr, channelNames).run();
 
         System.out.println("Hello World - Done!");
     }

@@ -96,6 +96,7 @@ public class WSClient implements CAClient {
     
     @Override
     public void close() throws Exception {
+        System.out.println("WSClient close");
         session.close();
     }
     
