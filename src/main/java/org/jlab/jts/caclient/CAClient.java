@@ -6,6 +6,7 @@ import org.jlab.jts.caclient.ws.WSClient;
 import org.jlab.jts.integration.TestCase;
 import org.jlab.jts.integration.testcase.HelloWorldTestCase;
 import org.jlab.jts.integration.testcase.HighConcurrencyTestCase;
+import org.jlab.jts.integration.testcase.HighContentionTestCase;
 import org.jlab.jts.integration.testcase.HighThroughputTestCase;
 import org.jlab.jts.integration.testcase.SlowClientTestCase;
 import org.jlab.jts.integration.testcase.StaggeredClientsTestCase;
@@ -17,17 +18,17 @@ import org.jlab.jts.integration.testcase.StaggeredClientsTestCase;
 public interface CAClient extends AutoCloseable {
 
     public ChannelGroup create(String[] channelNames);
-    
+
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, Exception {
         if (args != null && args.length == 2) {
             String clientStr = args[0];
             String testStr = args[1];
             System.out.println("Client: " + clientStr);
             System.out.println("Test: " + testStr);
-            
+
             Class<? extends CAClient> clientClazz;
             Class<? extends TestCase> testClazz;
-            
+
             switch (clientStr) {
                 case "caj":
                     clientClazz = CAJClient.class;
@@ -41,7 +42,7 @@ public interface CAClient extends AutoCloseable {
                 default:
                     throw new IllegalArgumentException("Unknown client: " + clientStr);
             }
-            
+
             switch (testStr) {
                 case "hello":
                     testClazz = HelloWorldTestCase.class;
@@ -58,16 +59,19 @@ public interface CAClient extends AutoCloseable {
                 case "staggered":
                     testClazz = StaggeredClientsTestCase.class;
                     break;
+                case "contention":
+                    testClazz = HighContentionTestCase.class;
+                    break;
                 default:
                     throw new IllegalArgumentException("Unknown test: " + testStr);
             }
-            
+
             Class[] constructorArgs = {Class.class};
-            
+
             try (TestCase test = testClazz.getDeclaredConstructor(constructorArgs).newInstance(clientClazz)) {
                 test.doTest();
             }
-            
+
         } else {
             throw new IllegalArgumentException("Please provide 2 arguments: (0) Client, (1) Test");
         }

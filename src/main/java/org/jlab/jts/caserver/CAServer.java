@@ -25,31 +25,29 @@ import org.jlab.jts.caserver.jmx.ServerKillerMBean;
 
 public class CAServer {
 
-    private static final Logger LOGGER = Logger.getLogger(CAServer.class.getName());    
-    
+    private static final Logger LOGGER = Logger.getLogger(CAServer.class.getName());
+
     private volatile ServerContext context = null;
 
     private void initialize() throws CAException {
 
-        System.setProperty("com.cosylab.epics.caj.cas.CAJServerContext.ignore_addr_list",  "127.0.0.1:5064 localhost:5064");   
+        System.setProperty("com.cosylab.epics.caj.cas.CAJServerContext.ignore_addr_list", "127.0.0.1:5064 localhost:5064");
         //System.setProperty("com.cosylab.epics.caj.cas.CAJServerContext.beacon_addr_list",  "");
         //System.setProperty("com.cosylab.epics.caj.cas.CAJServerContext.auto_beacon_addr_list",  "false");        
-        
+
         // Let's slow everything down on purpose!
         //System.setProperty(CAJ_SINGLE_THREADED_MODEL, CAJ_SINGLE_THREADED_MODEL);
-        
         JCALibrary jca = JCALibrary.getInstance();
 
         DefaultServerImpl server = new DefaultServerImpl();
-        
+
         //DefaultConfiguration config = new DefaultConfiguration("config");        
         //config.setAttribute("class", JCALibrary.CHANNEL_ACCESS_SERVER_JAVA);
         //context = jca.createServerContext(config, server);        
-        
         context = jca.createServerContext(JCALibrary.CHANNEL_ACCESS_SERVER_JAVA, server);
 
         registerProcessVariables(server);
-        
+
         context.addContextExceptionListener(new ContextExceptionListener() {
             @Override
             public void contextException(ContextExceptionEvent ev) {
@@ -65,17 +63,21 @@ public class CAServer {
         });
     }
 
-    private void registerProcessVariables(DefaultServerImpl server) {
+    void registerProcessVariables(DefaultServerImpl server) {
 
+        CounterProcessVariable counter = new CounterProcessVariable("counterAlpha", null, 0, Integer.MAX_VALUE, 1, 1000, 10, 20, 0, 100);
+        server.registerProcessVaribale(counter);        
+        
         final int numCounters = 5000;
 
+        registerCounters(server, numCounters);
+    }
+
+    void registerCounters(DefaultServerImpl server, int numCounters) {
         for (int i = 0; i < numCounters; i++) {
             CounterProcessVariable counter = new CounterProcessVariable("counter" + i, null, 0, Integer.MAX_VALUE, 1, 10, 10, 20, 0, 100);
             server.registerProcessVaribale(counter);
         }
-
-        CounterProcessVariable counter = new CounterProcessVariable("counterAlpha", null, 0, Integer.MAX_VALUE, 1, 1000, 10, 20, 0, 100);
-        server.registerProcessVaribale(counter);
     }
 
     public void destroy() {
@@ -111,17 +113,19 @@ public class CAServer {
 
     }
 
-    public static void main(String[] args) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
-
-        
-        CAServer server = new CAServer();
-        
+    static void setupJMX(CAServer server) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
         // JMX management object for shutting the server down cleanly
         ServerKillerMBean monitor = new ServerKiller(server);
         MBeanServer mbserver = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("org.jlab.jts.caserver.jmx:type=ServerKiller");
         mbserver.registerMBean(monitor, name);
+    }
 
+    public static void main(String[] args) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
+
+        CAServer server = new CAServer();
+
+        setupJMX(server);
 
         // Start
         server.execute();
