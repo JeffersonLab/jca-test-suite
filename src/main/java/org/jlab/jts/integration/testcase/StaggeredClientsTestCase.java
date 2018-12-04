@@ -47,19 +47,30 @@ public class StaggeredClientsTestCase implements TestCase {
         Consumer<? super Object> cnsmr = (value) -> count.incrementAndGet();
         int numClients = 1000;
         
+        long start = System.currentTimeMillis();
+        
         // Create web socket connections
         for (int i = 0; i < numClients; i++) {            
             executor.execute(new TestCaseRunner(clazz, timeoutSeconds, monitorSeconds, cnsmr, channelNames));
             
             Thread.sleep(200); // Create five new clients per second            
         }
-        
+                
         executor.shutdown();
         
-        executor.awaitTermination(1, TimeUnit.MINUTES); // Wait at least as long as monitorSeconds...
+        boolean finished = executor.awaitTermination(1, TimeUnit.MINUTES); // Wait at least as long as monitorSeconds...
         
+        if(!finished) {
+            System.out.println("timeout");
+        }
+        
+        long stop = System.currentTimeMillis();
+        
+        long durationSeconds = ((stop - start) / 1000);
+        
+        System.out.println("duration (seconds): " + durationSeconds);
         System.out.println("done with test: total updates: " + String.format("%,d", count.get()));
-        System.out.println("average updates per second: " + String.format("%,.2f", count.get() / Double.valueOf(monitorSeconds)));        
+        System.out.println("average updates per second: " + String.format("%,.2f", count.get() / Double.valueOf(durationSeconds)));        
     }
 
     @Override
